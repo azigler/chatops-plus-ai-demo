@@ -1,0 +1,11 @@
+tasks:
+  - name: Install & Setup
+    init: sh sed.sh
+    command: docker-compose up -d
+ports:
+  - port: 8065
+    onOpen: open-browser
+    visibility: public
+  - port: 5678
+    onOpen: open-browser
+    visibility: public

@@ -15,7 +15,7 @@ services:
       - TZ=UTC
       - MM_SQLSETTINGS_DRIVERNAME=postgres
       - MM_SQLSETTINGS_DATASOURCE=postgres://postgres:postgres_root@postgres:5432/mattermost?sslmode=disable&connect_timeout=10
-      - MM_SERVICESETTINGS_SITEURL=http://mattermost:8065
+      - MM_SERVICESETTINGS_SITEURL={GITPOD_MM_URL}
       - MM_SERVICESETTINGS_ENABLEUSERACCESSTOKENS=true
       - MM_SERVICESETTINGS_ENABLEBOTACCOUNTCREATION=true
       - MM_SERVICESETTINGS_ENABLEDEVELOPER=true
@@ -56,5 +56,6 @@ services:
       - 5678:5678
     environment:
       - GENERIC_TIMEZONE=UTC
+      - WEBHOOK_URL={GITPOD_N8N_URL}
     volumes:
       - "./containers/n8n:/home/node/.n8n"

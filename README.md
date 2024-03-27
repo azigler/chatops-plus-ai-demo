@@ -22,7 +22,9 @@ Integrating AI into DevSecOps workflows represents a significant leap in efficie
 
 ## Install
 
-Coming soon...
+This demo is built to be self-guided on Gitpod. To get your own workspace and start the demo, click below:
+
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/azigler/chatops-plus-ai-demo)
 
 ## Usage
 
