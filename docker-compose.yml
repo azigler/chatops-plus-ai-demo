@@ -1,0 +1,60 @@
+---
+version: "3.9"
+networks:
+  default:
+    name: mattermost-datadog-demo
+services:
+  mattermost:
+    container_name: mattermost
+    image: mattermost/mattermost-team-edition:latest
+    restart: unless-stopped
+    user: 0:0
+    depends_on:
+      - postgres
+    environment:
+      - TZ=UTC
+      - MM_SQLSETTINGS_DRIVERNAME=postgres
+      - MM_SQLSETTINGS_DATASOURCE=postgres://postgres:postgres_root@postgres:5432/mattermost?sslmode=disable&connect_timeout=10
+      - MM_SERVICESETTINGS_SITEURL=http://mattermost:8065
+      - MM_SERVICESETTINGS_ENABLEUSERACCESSTOKENS=true
+      - MM_SERVICESETTINGS_ENABLEBOTACCOUNTCREATION=true
+      - MM_SERVICESETTINGS_ENABLEDEVELOPER=true
+      - MM_SERVICESETTINGS_ENABLETESTING=true
+      - MM_SERVICESETTINGS_ENABLELOCALMODE=true
+      - MM_TEAMSETTINGS_TEAMMATENAMEDISPLAY=full_name
+      - MM_PLUGINSETTINGS_AUTOMATICPREPACKAGEDPLUGINS=true
+      - MM_PLUGINSETTINGS_ENABLEUPLOADS=true
+      - MM_LOGSETTINGS_CONSOLELEVEL=DEBUG
+      - MM_LOGSETTINGS_FILELEVEL=DEBUG
+      - MM_FILESETTINGS_MAXFILESIZE=123524266
+    volumes:
+      - "./containers/mattermost/config:/mattermost/config"
+      - "./containers/mattermost/data:/mattermost/data"
+      - "./containers/mattermost/logs:/mattermost/logs"
+      - "./containers/mattermost/plugins:/mattermost/plugins"
+      - "./containers/mattermost/client/plugins:/mattermost/client/plugins"
+      - "./containers/mattermost/credentials:/credentials:ro"
+    ports:
+      - 8065:8065
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    restart: unless-stopped
+    environment:
+      - TZ=UTC
+      - POSTGRES_PASSWORD=postgres_root
+      - POSTGRES_DB=mattermost
+    volumes:
+      - "./containers/postgres/data:/var/lib/postgresql/data"
+      - "./containers/postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d"
+  n8n:
+    container_name: n8n
+    image: n8nio/n8n:latest
+    restart: unless-stopped
+    user: 0:0
+    ports:
+      - 5678:5678
+    environment:
+      - GENERIC_TIMEZONE=UTC
+    volumes:
+      - "./containers/n8n:/home/node/.n8n"
