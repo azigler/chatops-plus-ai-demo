@@ -2,7 +2,7 @@
 version: "3.9"
 networks:
   default:
-    name: mattermost-datadog-demo
+    name: chatops-plus-ai-demo
 services:
   mattermost:
     container_name: mattermost
