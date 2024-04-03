@@ -28,7 +28,9 @@ This demo is built to be self-guided on Gitpod. To get your own workspace and st
 
 ## Usage
 
-Coming soon...
+Follow along on the accompanying slides: [ChatOps + AI = helping humans do their job better](https://docs.google.com/presentation/d/1ESDH2glJlAMM3LUcZHTrw18BMH8jVMl3q-lx0fQ1_y0/edit?usp=sharing)
+
+The included `Fetch_and_post_data_from_developers_event.json` file can be imported to n8n as an example workflow.
 
 ## Further Reading
 
