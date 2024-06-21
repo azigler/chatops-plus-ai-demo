@@ -1,0 +1,102 @@
+{
+  "name": "Change my Mattermost theme",
+  "nodes": [
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "https://8065-azigler-chatopsplusaide-r9jdvg8vlw2.ws-us114.gitpod.io/api/v4/users/smr5j7k5ijrk8n8swjhk3e4oja/preferences",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "mattermostApi",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "=[{\"user_id\":\"smr5j7k5ijrk8n8swjhk3e4oja\",\"category\":\"theme\",\"name\":\"\",\"value\":\"{{ $json.body.theme_css.replace(/\"/g, '\\\\\"') }}\"}]",
+        "options": {}
+      },
+      "id": "0c72a9c4-dd13-4a62-ab8e-89eaab8aadb4",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1500,
+        560
+      ],
+      "notesInFlow": true,
+      "credentials": {
+        "mattermostApi": {
+          "id": "s6tmqjU4temTmMg0",
+          "name": "Mattermost account"
+        }
+      },
+      "notes": "{\n  \"theme_css\": \"string\"\n}"
+    },
+    {
+      "parameters": {
+        "jsCode": "return {status: \"success\", assistant_hint: \"Report back that the theme was successfully changed.\", \"result\": $input.all()[0].json.data}"
+      },
+      "id": "5ce1bb7a-39ce-4206-9c59-71cc62b3f39d",
+      "name": "Write AI Copilot response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1860,
+        560
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "8d304053-7c35-4064-86e0-d6b3ddbc2324",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "3c1c473f-b92d-4d5d-8a20-a46498d72718",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        1140,
+        560
+      ],
+      "webhookId": "8d304053-7c35-4064-86e0-d6b3ddbc2324",
+      "notesInFlow": true,
+      "notes": "This function allows you to set the user's theme in Mattermost."
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Write AI Copilot response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "a2360b6d-7ad0-47b1-baa2-cd16c90b64f0",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "51329ad0b54c904ead71ec7265265bde6b86a23fb35f984b6e0efe4d45a8cd42"
+  },
+  "id": "XvIrYdBGKguEs8eO",
+  "tags": []
+}

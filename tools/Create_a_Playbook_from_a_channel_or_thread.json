@@ -1,0 +1,108 @@
+{
+  "name": "Create a Mattermost Playbook",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "00770699-bafe-4849-8c32-de3cc83779f3",
+        "options": {}
+      },
+      "id": "f439696b-3e52-4053-9601-88b289d02dee",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [1200, 560],
+      "webhookId": "00770699-bafe-4849-8c32-de3cc83779f3",
+      "notesInFlow": true,
+      "notes": "This function allows you to generate a working Mattermost Playbook JSON and upload it to a Mattermost server for use."
+    },
+    {
+      "parameters": {
+        "resource": "assistant",
+        "assistantId": {
+          "__rl": true,
+          "value": "asst_Urdf2XG20a72VrK8WpD1dzpT",
+          "mode": "list",
+          "cachedResultName": "PlaybookGPT"
+        },
+        "prompt": "define",
+        "text": "=Generate a valid Mattermost Playbook JSON file that can be used as a repeatable workflow to solve the following prompt: {{ [0].json.body.playbook_prompt }}",
+        "options": {}
+      },
+      "id": "17a4042c-c858-47a4-8c10-a7ce3f968a1a",
+      "name": "OpenAI",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.3,
+      "position": [1380, 560],
+      "credentials": {
+        "openAiApi": {
+          "id": "3lKL2NRhF9fQ60eZ",
+          "name": "OpenAi account"
+        }
+      },
+      "notes": "{\n   \"playbook_prompt\": \"string\"\n}"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://mattermost:8065/plugins/playbooks/api/v0/playbooks",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "mattermostApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $input }}",
+        "options": {}
+      },
+      "id": "ebfa34a1-8673-457d-8862-cc0bb43517a4",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1760, 560],
+      "credentials": {
+        "mattermostApi": {
+          "id": "9Btae9xBwS4yQ8US",
+          "name": "Mattermost account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [[]]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "441291dd-0e9f-4de4-b856-3f6d042b31e2",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "f818cf472d738e6ee092b177ac6ba0b4d57d6d6286cd6b4f44168b133556057b"
+  },
+  "id": "7gMYO3VKxJ5VDrao",
+  "tags": []
+}

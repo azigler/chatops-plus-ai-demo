@@ -1,0 +1,114 @@
+{
+  "name": "Fetch a webpage",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "={{ $json.body.target_url }}",
+        "options": {}
+      },
+      "id": "11dbc957-c6e2-4f53-934e-af54af49eb58",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1240,
+        580
+      ],
+      "notesInFlow": true,
+      "notes": "{\n  \"target_url\": \"string\"\n}"
+    },
+    {
+      "parameters": {
+        "jsCode": "return {status: \"success\", assistant_hint: \"You have succeeded in fetching the webpage. The result key contains the response of the provided URL, which you should utilize to further resolve the user's request.\", \"result\": $input.all()[0].json.data}"
+      },
+      "id": "7f114701-cc43-499e-9d78-29ce246005a0",
+      "name": "Write AI Copilot response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1640,
+        580
+      ]
+    },
+    {
+      "parameters": {
+        "html": "={{ $json.data }}",
+        "options": {}
+      },
+      "id": "921722b1-458b-4e4a-b4aa-33bc1167f51f",
+      "name": "Markdown",
+      "type": "n8n-nodes-base.markdown",
+      "typeVersion": 1,
+      "position": [
+        1460,
+        580
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "16e8799d-57ac-49d9-a358-a2f8075acc85",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "bef01024-7459-47ff-8462-6a3875309593",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        1020,
+        580
+      ],
+      "webhookId": "16e8799d-57ac-49d9-a358-a2f8075acc85",
+      "notesInFlow": true,
+      "notes": "This function allows you to access the inteernet via a GET call to a target URL. It returns the results of the HTTP query."
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Markdown",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Markdown": {
+      "main": [
+        [
+          {
+            "node": "Write AI Copilot response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "f89f6858-acbb-4571-9d20-9d5043e58c33",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "51329ad0b54c904ead71ec7265265bde6b86a23fb35f984b6e0efe4d45a8cd42"
+  },
+  "id": "z1JOXkmmpIVx2NYV",
+  "tags": []
+}

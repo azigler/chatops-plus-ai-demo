@@ -31,7 +31,7 @@ This demo is built to be self-guided on Gitpod. To get your own workspace and st
 
 Follow along on the accompanying slides: [How to be a no-code AI power user](https://docs.google.com/presentation/d/1zqtOVUq5Ww06gHc34u50zF5D5s8JfJDCoBrrt8LwoJw/edit?usp=sharing)
 
-The included `low-code.json` and `no-code.json` files can be imported to n8n as an example workflow.
+Check out the n8n workflows included in the `tools/` directory.
 
 ## Further Reading
 

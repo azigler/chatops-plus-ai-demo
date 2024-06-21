@@ -1,0 +1,97 @@
+{
+  "name": "Fetch a Mattermost Playbook run",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "=https://8065-azigler-chatopsplusaide-r9jdvg8vlw2.ws-us114.gitpod.io/plugins/playbooks/api/v0/runs/{{ $json.body.playbook_run_id }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "mattermostApi",
+        "options": {}
+      },
+      "id": "888f9bf2-1dd5-4c1d-b847-2d995bef1071",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1140,
+        620
+      ],
+      "notesInFlow": true,
+      "credentials": {
+        "mattermostApi": {
+          "id": "s6tmqjU4temTmMg0",
+          "name": "Mattermost account"
+        }
+      },
+      "notes": "{\n  \"playbook_run_id\": \"string\"\n}"
+    },
+    {
+      "parameters": {
+        "jsCode": "return {status: \"success\", assistant_hint: \"Use the JSON response back from the Mattermost server to further assist the user. If asked to format this information in a specific way, respect the request of the user.\", \"result\": $input.all()[0].json}"
+      },
+      "id": "722bdc41-843f-400e-8ee0-e5f0aa3fce22",
+      "name": "Write AI Copilot response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1400,
+        620
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "83664ddd-d30a-4353-b612-39a79d2ff052",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "a2e60ce2-3e57-493d-b29e-534a78dbdd18",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        860,
+        620
+      ],
+      "webhookId": "83664ddd-d30a-4353-b612-39a79d2ff052",
+      "notesInFlow": true,
+      "notes": "This function allows you to retrieve a Mattermost Playbook run by ID."
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Write AI Copilot response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "442c8683-e58c-4eda-9aac-88935975f0e9",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "51329ad0b54c904ead71ec7265265bde6b86a23fb35f984b6e0efe4d45a8cd42"
+  },
+  "id": "QA0t1rpuqPNUFihN",
+  "tags": []
+}

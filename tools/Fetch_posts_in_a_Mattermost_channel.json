@@ -1,0 +1,106 @@
+{
+  "name": "Fetch posts in a Mattermost channel",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "=https://8065-azigler-chatopsplusaide-r9jdvg8vlw2.ws-us114.gitpod.io/api/v4/channels/{{ $json.body.channel_id }}/posts",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "mattermostApi",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "since",
+              "value": "={{ $json.body.messages_since }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "9438c3f0-8649-40f3-a773-ef340605a9cc",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1060,
+        520
+      ],
+      "notesInFlow": true,
+      "credentials": {
+        "mattermostApi": {
+          "id": "s6tmqjU4temTmMg0",
+          "name": "Mattermost account"
+        }
+      },
+      "notes": "{\n  \"channel_id\": \"string\",\n  \"messages_since\": \"integer\"\n}"
+    },
+    {
+      "parameters": {
+        "jsCode": "return {status: \"success\", assistant_hint: \"Use the JSON response back from the Mattermost server to further assist the user. If asked to format this information in a specific way, respect the request of the user.\", \"result\": $input.all()[0].json}"
+      },
+      "id": "f92a2e75-3f73-4488-bcdc-4129fb87624a",
+      "name": "Write AI Copilot response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1420,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "8d304053-7c35-45484-86e0-d6b3ddbc2324",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "89b68bd8-6aa4-43d7-b2e6-808d75c64246",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        700,
+        520
+      ],
+      "webhookId": "8d304053-7c35-4064-86e0-d6b3ddbc2324",
+      "notesInFlow": true,
+      "notes": "This function allows you to fetch posts in a channel since a value in Unix time milliseconds."
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Write AI Copilot response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "9289b3de-a7a3-4830-8ca2-676a13e8e25a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "51329ad0b54c904ead71ec7265265bde6b86a23fb35f984b6e0efe4d45a8cd42"
+  },
+  "id": "rfuQxSqMBdvOVJzp",
+  "tags": []
+}

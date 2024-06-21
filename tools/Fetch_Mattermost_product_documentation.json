@@ -1,0 +1,161 @@
+{
+  "name": "Fetch Mattermost product documentation",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "=https://docs.mattermost.com/search.html?q={{json.body.search_query}}&check_keywords=yes&area=default",
+        "options": {}
+      },
+      "id": "2c82e473-285b-48a0-b8d8-cde972aa842f",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        680,
+        460
+      ],
+      "notesInFlow": true,
+      "notes": "{\n  \"search_query\": \"string\"\n}"
+    },
+    {
+      "parameters": {
+        "jsCode": "return {status: \"success\", assistant_hint: \"You have succeeded in fetching Mattermost product documentation. The result key contains the output of the provided search query, which you should utilize to further resolve the user's request.\", \"result\": $input.all()[0].json.data}"
+      },
+      "id": "0ef08e6b-67b8-4ce4-8283-dd513c0a3ce9",
+      "name": "Write AI Copilot response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1520,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "html": "= {{ $json.data }}",
+        "options": {}
+      },
+      "id": "6f4f81e0-e32d-4830-9390-3ce3c65f2582",
+      "name": "Markdown",
+      "type": "n8n-nodes-base.markdown",
+      "typeVersion": 1,
+      "position": [
+        900,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "b820dc44-9b07-44f8-b84a-0125c1ed938d",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "f0901a67-2977-4da6-97f0-c3894715356d",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        460,
+        460
+      ],
+      "webhookId": "b820dc44-9b07-44f8-b84a-0125c1ed938d",
+      "notesInFlow": true,
+      "notes": "This function allows you to search the Mattermost product documentation and returns search page results."
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4-turbo",
+          "mode": "list",
+          "cachedResultName": "GPT-4-TURBO"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Consider the search query \"{{ $json.body.search_query }}\" and select the most helpful link from the provided Markdown."
+            },
+            {
+              "content": "You are a helpful search assistant that looks at Markdown or HTML and extracts the most helpful links for the provided search query.",
+              "role": "assistant"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f2ebd3ef-fdee-42f8-917e-41b311cb73e5",
+      "name": "OpenAI",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.3,
+      "position": [
+        1120,
+        460
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "5xy0HRGlltL9oF2X",
+          "name": "OpenAi account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Markdown",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Markdown": {
+      "main": [
+        [
+          {
+            "node": "OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI": {
+      "main": [
+        [
+          {
+            "node": "Write AI Copilot response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "2a8f5607-b7a4-425b-91a5-8397f99dbebe",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "51329ad0b54c904ead71ec7265265bde6b86a23fb35f984b6e0efe4d45a8cd42"
+  },
+  "id": "EpnpAIuASfNTl8WC",
+  "tags": []
+}
